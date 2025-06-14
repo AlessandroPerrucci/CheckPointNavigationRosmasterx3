@@ -42,6 +42,13 @@ RUN apt-get update && apt-get install -y \
     apt-transport-https\
     && rm -rf /var/lib/apt/lists/*
 
+WORKDIR /ros_ws
+RUN git clone https://github.com/Slamtec/rplidar_ros.git
+RUN git clone https://github.com/Adlink-ROS/rf2o_laser_odometry.git
+RUN git clone https://github.com/orbbec/ros2_astra_camera.git
+RUN colcon build
+RUN echo "source install/setup.bash" >> /root/.bashrc
+WORKDIR ../
 
 # Setup ambiente ROS 2
 RUN echo "source /opt/ros/humble/setup.bash" >> /root/.bashrc
