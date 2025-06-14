@@ -43,9 +43,13 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /ros_ws
+WORKDIR /mapping_ws
 RUN git clone https://github.com/Slamtec/rplidar_ros.git
 RUN git clone https://github.com/Adlink-ROS/rf2o_laser_odometry.git
 RUN git clone https://github.com/orbbec/ros2_astra_camera.git
+COPY keyboard.py ./
+WORKDIR ../patrol_ws
+COPY patrol_ws ./
 RUN colcon build
 RUN echo "source install/setup.bash" >> /root/.bashrc
 WORKDIR ../
