@@ -43,12 +43,12 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /ros_ws
-WORKDIR /mapping_ws
+COPY mapping_ws /mapping_ws
+WORKDIR /mapping_ws/src
 RUN git clone https://github.com/Slamtec/rplidar_ros.git
 RUN git clone https://github.com/Adlink-ROS/rf2o_laser_odometry.git
 RUN git clone https://github.com/orbbec/ros2_astra_camera.git
-COPY keyboard.py ./
-WORKDIR ../patrol_ws
+WORKDIR ../../
 COPY patrol_ws ./
 RUN colcon build
 RUN echo "source install/setup.bash" >> /root/.bashrc
@@ -61,8 +61,9 @@ COPY py_install /py_install
 # Entra nella cartella e installa il pacchetto
 WORKDIR /py_install
 RUN python3 setup.py install
-RUN pip install pyserial
 WORKDIR ../
 RUN apt-get update && apt-get install -y nano && rm -rf /var/lib/apt/lists/*
-
 RUN pip install opencv-python
+RUN pip install sshkeyboard
+RUN pip install pyserial
+
