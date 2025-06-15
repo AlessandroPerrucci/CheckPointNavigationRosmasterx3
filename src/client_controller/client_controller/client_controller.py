@@ -200,8 +200,8 @@ def main(args=None):
                 except ValueError:
                     print("⚠ Inserisci solo numeri interi validi.")
         else:
-            #print(os.path.abspath("./map_1748022744.pgm"))
-            pgm_path = '/home/ros/action_ws/src/client_controller/client_controller/map_1748022744.pgm'
+            #print(os.path.abspath("./mappaCorridoio.pgm"))
+            pgm_path = '/ros_ws/client_controller/client_controller/mappaLaboratorio.pgm'
             print(os.path.abspath(pgm_path))
             map_img = cv2.imread(pgm_path, cv2.IMREAD_GRAYSCALE)
             _, bin_map = cv2.threshold(map_img, 205, 255, cv2.THRESH_BINARY)  # 200: threshold tipico

@@ -210,30 +210,33 @@ def on_release(key):
         tasti_premuti[key] = False
         robot.set_car_motion(0, 0, 0)
 
+def main(args=None):
+    try:
+        print("Controllo robot attivo. Usa le frecce per muovere, A/D per ruotare, Q per uscire.")
+        # Avvia il listener della tastiera
+        listen_keyboard(on_press=on_press, on_release=on_release)
+    except KeyboardInterrupt:
+        print("\nInterruzione ricevuta. Fermando il robot...")
+    finally:
+        print("Fermando il robot...")
+        robot.set_car_motion(0, 0, 0)
+        robot.clear_auto_report_data()
+        del robot
+        print("Robot fermato.")
 
-try:
-    print("Controllo robot attivo. Usa le frecce per muovere, A/D per ruotare, Q per uscire.")
-    # Avvia il listener della tastiera
-    listen_keyboard(on_press=on_press, on_release=on_release)
-except KeyboardInterrupt:
-    print("\nInterruzione ricevuta. Fermando il robot...")
-finally:
-    print("Fermando il robot...")
-    robot.set_car_motion(0, 0, 0)
-    robot.clear_auto_report_data()
-    del robot
-    print("Robot fermato.")
+        # Salva la mappa prima di uscire
+        print("SALVANDO LA MAPPA...")
 
-    # Salva la mappa prima di uscire
-    print("SALVANDO LA MAPPA...")
+        map_saved = save_map_on_exit(max_retries=3, retry_delay=3.0)
 
-    map_saved = save_map_on_exit(max_retries=3, retry_delay=3.0)
+        if map_saved:
+            print("✓ MAPPA SALVATA CORRETTAMENTE!")
+        else:
+            print("✗ IMPOSSIBILE SALVARE LA MAPPA!")
+            print("Verifica che SLAM Toolbox sia in esecuzione:")
 
-    if map_saved:
-        print("✓ MAPPA SALVATA CORRETTAMENTE!")
-    else:
-        print("✗ IMPOSSIBILE SALVARE LA MAPPA!")
-        print("Verifica che SLAM Toolbox sia in esecuzione:")
+        print("Uscita dal programma.")
+        sys.exit(0)
 
-    print("Uscita dal programma.")
-    sys.exit(0)
+if __name__ == '__main__':
+    main()

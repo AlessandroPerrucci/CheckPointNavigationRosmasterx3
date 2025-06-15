@@ -39,7 +39,7 @@ in the folder where the Dockerfile is located.
 -Run the command
 
 ```bash
-   ros2 launch mapping start_mapping.py 
+   ros2 launch mapping mapping_launch.py 
 ```
 
 - Move the robot in the environment by using the keyboard.

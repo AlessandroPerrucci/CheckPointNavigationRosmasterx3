@@ -46,7 +46,8 @@ RUN git clone https://github.com/Adlink-ROS/rf2o_laser_odometry.git
 RUN git clone https://github.com/orbbec/ros2_astra_camera.git
 RUN . /opt/ros/humble/setup.sh && rm -rf build/ log/ install/ && colcon build
 WORKDIR ../
-
+COPY start_mapping.sh .
+COPY start_navigating.sh .
 # Setup ambiente ROS 2
 RUN echo "source /opt/ros/humble/setup.bash" >> /root/.bashrc
 RUN echo "source /ros_ws/install/setup.bash" >> /root/.bashrc
