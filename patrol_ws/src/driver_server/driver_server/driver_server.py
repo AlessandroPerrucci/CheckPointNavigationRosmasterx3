@@ -53,6 +53,8 @@ class DriverServer(Node):
 
         while not (self.orientamento == goal.request.orientamento_atteso):
             await self.calcolodir(goal.request.orientamento_atteso)
+            time.sleep(1.5)
+            print(self.bot.get_imu_attitude_data()[2])
         time.sleep(0.5)
         success = await self.go_forward(steps=goal.request.steps)
         result = MovimentoRobot.Result()
