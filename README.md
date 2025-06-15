@@ -33,7 +33,7 @@ in the folder where the Dockerfile is located.
 - Open the docker with the command
 
 ```bash
-  docker run -it --privileged -v /dev:/dev ros2-humble-arm64
+  docker run -it --rm  -p 8080:8080 --privileged -v /dev:/dev ros2-humble-arm64
 ```
 
 -Run the commands
