@@ -43,7 +43,7 @@ WORKDIR /ros_ws
 COPY src/ /ros_ws/
 RUN git clone -b ros2 https://github.com/Slamtec/rplidar_ros.git
 RUN git clone https://github.com/Adlink-ROS/rf2o_laser_odometry.git
-#RUN git clone https://github.com/orbbec/ros2_astra_camera.git
+RUN git clone https://github.com/orbbec/ros2_astra_camera.git
 RUN . /opt/ros/humble/setup.sh && rm -rf build/ log/ install/ && colcon build
 WORKDIR ../
 
@@ -59,3 +59,6 @@ RUN apt-get update && apt-get install -y nano && rm -rf /var/lib/apt/lists/*
 RUN pip install opencv-python
 RUN pip install sshkeyboard
 RUN pip install pyserial
+
+RUN apt-get update && apt-get install -y ros-humble-web-video-server
+EXPOSE 8080
