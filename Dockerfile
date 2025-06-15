@@ -40,7 +40,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /ros_ws
-COPY src/* .
+COPY src/ /ros_ws/
 RUN git clone -b ros2 https://github.com/Slamtec/rplidar_ros.git
 RUN git clone https://github.com/Adlink-ROS/rf2o_laser_odometry.git
 #RUN git clone https://github.com/orbbec/ros2_astra_camera.git
