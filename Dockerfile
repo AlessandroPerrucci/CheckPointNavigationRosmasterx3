@@ -40,25 +40,16 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /ros_ws
-COPY mapping_ws /ros_ws/mapping_ws
-WORKDIR /mapping_ws/src
+COPY src/* .
 RUN git clone -b ros2 https://github.com/Slamtec/rplidar_ros.git
 RUN git clone https://github.com/Adlink-ROS/rf2o_laser_odometry.git
 #RUN git clone https://github.com/orbbec/ros2_astra_camera.git
-WORKDIR ../
-COPY patrol_ws /ros_ws/patrol_ws
-
-# Build solo i pacchetti necessari del workspace
-RUN . /opt/ros/humble/setup.sh && rm -rf build/ log/ install/ && \
-    colcon build --symlink-install \
-    --packages-select rplidar_ros rf2o_laser_odometry \
-    --cmake-args -DCMAKE_BUILD_TYPE=Release
-
-RUN echo "source install/setup.bash" >> /root/.bashrc
+RUN . /opt/ros/humble/setup.sh && rm -rf build/ log/ install/ && colcon build
 WORKDIR ../
 
 # Setup ambiente ROS 2
 RUN echo "source /opt/ros/humble/setup.bash" >> /root/.bashrc
+RUN echo "source /ros_ws/install/setup.bash" >> /root/.bashrc
 COPY py_install /py_install
 # Entra nella cartella e installa il pacchetto
 WORKDIR /py_install

@@ -20,7 +20,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-                'keyboard = controller.keyboard:main'
+                'keyboard = mapping.keyboard:main'
         ],
     },
 )
