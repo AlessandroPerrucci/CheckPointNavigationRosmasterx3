@@ -33,7 +33,7 @@ def generate_launch_description():
             output='log'
         )
 	Node(
-            package='patrol_ws',
+            package='mapping',
             executable='keyboard',
             name='keyboard',
             output='screen'
