@@ -1,5 +1,4 @@
-FROM ros2-humble-arm64
-
+FROM arm64v8/ros:humble
 # Imposta variabili ambientali
 ENV DEBIAN_FRONTEND=noninteractive
 ENV LANG=en_US.UTF-8
@@ -20,7 +19,6 @@ RUN apt-get update && apt-get install -y \
 # Imposta timezone (modificabile)
 RUN ln -fs /usr/share/zoneinfo/UTC /etc/localtime && dpkg-reconfigure -f noninteractive tzdata
 
-
 # Installa ROS 2 Humble Desktop Full + strumenti di sviluppo
 RUN apt-get update && apt-get install -y \
     ros-humble-desktop-full \
@@ -28,7 +26,7 @@ RUN apt-get update && apt-get install -y \
     python3-pip \
     git \
     && rm -rf /var/lib/apt/lists/*
-
+# Installa pacchetti ROS 2 aggiuntivi
 RUN apt-get update && apt-get install -y \
     ros-humble-slam-toolbox \
     ros-humble-navigation2 \
@@ -38,26 +36,30 @@ RUN apt-get update && apt-get install -y \
     ros-humble-camera-info-manager \
     ros-humble-image-publisher \
     ros-humble-robot-localization \
-    ros-humble-slam-toolbox \
-    apt-transport-https\
+    apt-transport-https \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /ros_ws
-COPY mapping_ws /mapping_ws
+COPY mapping_ws /ros_ws/mapping_ws
 WORKDIR /mapping_ws/src
-RUN git clone https://github.com/Slamtec/rplidar_ros.git
+RUN git clone -b ros2 https://github.com/Slamtec/rplidar_ros.git
 RUN git clone https://github.com/Adlink-ROS/rf2o_laser_odometry.git
-RUN git clone https://github.com/orbbec/ros2_astra_camera.git
-WORKDIR ../../
-COPY patrol_ws ./
-RUN colcon build
+#RUN git clone https://github.com/orbbec/ros2_astra_camera.git
+WORKDIR ../
+COPY patrol_ws /ros_ws/patrol_ws
+
+# Build solo i pacchetti necessari del workspace
+RUN . /opt/ros/humble/setup.sh && rm -rf build/ log/ install/ && \
+    colcon build --symlink-install \
+    --packages-select rplidar_ros rf2o_laser_odometry \
+    --cmake-args -DCMAKE_BUILD_TYPE=Release
+
 RUN echo "source install/setup.bash" >> /root/.bashrc
 WORKDIR ../
 
 # Setup ambiente ROS 2
 RUN echo "source /opt/ros/humble/setup.bash" >> /root/.bashrc
 COPY py_install /py_install
-
 # Entra nella cartella e installa il pacchetto
 WORKDIR /py_install
 RUN python3 setup.py install
@@ -66,4 +68,3 @@ RUN apt-get update && apt-get install -y nano && rm -rf /var/lib/apt/lists/*
 RUN pip install opencv-python
 RUN pip install sshkeyboard
 RUN pip install pyserial
-
