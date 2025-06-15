@@ -55,7 +55,7 @@ class DriverServer(Node):
             time.sleep(1.5)
             print(self.bot.get_imu_attitude_data()[2])
         time.sleep(0.5)
-        success = await self.go_forward(steps=goal.request.steps)
+        success = await self.go_forward(steps=goal.request.steps, goal_handle=goal)
         result = MovimentoRobot.Result()
         if success:
             goal.succeed()
@@ -70,7 +70,7 @@ class DriverServer(Node):
         return result
 
 
-    async def go_forward(self, steps):
+    async def go_forward(self, steps, goal_handle):
         #print(self.bot.get_motor_encoder()[0])
         distanza_target = (steps * 0.05)-0.125  # metri
         enc_in=self.bot.get_motor_encoder()[0]
@@ -80,7 +80,20 @@ class DriverServer(Node):
 
         # Usa gli encoder per misurare la distanza
         distanza_percorsa = 0
+        feedback_msg = MovimentoRobot.Feedback()
         while distanza_percorsa < distanza_target:
+            if distanza_percorsa > temp4 and temp1 == True:
+                feedback_msg.progress = 25.0
+                goal_handle.publish_feedback(feedback_msg)
+                temp1 = False
+            elif distanza_percorsa > 2 * temp4 and temp2 == True:
+                feedback_msg.progress = 50.0
+                goal_handle.publish_feedback(feedback_msg)
+                temp2 = False
+            elif distanza_percorsa > 3 * temp4 and temp3 == True:
+                feedback_msg.progress = 75.0
+                goal_handle.publish_feedback(feedback_msg)
+                temp3 = False
             DIAMETRO_RUOTA = 0.06  # metri
             PASSI_PER_GIRO = 1205
             CIRCONFERENZA = 3.14159 * DIAMETRO_RUOTA
