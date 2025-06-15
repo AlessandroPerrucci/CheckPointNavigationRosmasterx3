@@ -31,7 +31,6 @@ class DriverServer(Node):
         self.bot.create_receive_threading()
         self.bot.set_auto_report_state(True)
         self.orientamento = 0
-        #self.bot.reset_flash_value()
 
 
 
@@ -75,9 +74,7 @@ class DriverServer(Node):
         #print(self.bot.get_motor_encoder()[0])
         distanza_target = (steps * 0.05)-0.125  # metri
         enc_in=self.bot.get_motor_encoder()[0]
-        # Resetta il conteggio degli encoder (se disponibile nel Rosmaster)
 
-        #self.bot.clear_auto_report_data()
 
         self.bot.set_motor(30, 31, 39, 36)
 
@@ -86,12 +83,11 @@ class DriverServer(Node):
         while distanza_percorsa < distanza_target:
             DIAMETRO_RUOTA = 0.06  # metri
             PASSI_PER_GIRO = 1205
-            CIRCONFERENZA = 3.14159 * DIAMETRO_RUOTA  # ~0.204 metri
-            METRI_PER_PASSO = CIRCONFERENZA / PASSI_PER_GIRO  # ~0.000567 metri/passo
+            CIRCONFERENZA = 3.14159 * DIAMETRO_RUOTA
+            METRI_PER_PASSO = CIRCONFERENZA / PASSI_PER_GIRO
 
             encoder_data = self.bot.get_motor_encoder()[0]
-            # Converti i passi dell'encoder in metri (dipende dal tuo robot)
-            distanza_percorsa = (encoder_data-enc_in) * METRI_PER_PASSO  # esempio: 1 passo = 1mm
+            distanza_percorsa = (encoder_data-enc_in) * METRI_PER_PASSO
             time.sleep(0.01)
             #print(encoder_data-enc_in)
         self.bot.set_motor(0, 0, 0, 0)
@@ -118,8 +114,7 @@ class DriverServer(Node):
 def main(args=None):
     rclpy.init(args=args)
     server = DriverServer()
-    #time.sleep(5)
-    # Utilizza un executor per gestire l'esecuzione delle callback
+
     executor = MultiThreadedExecutor(num_threads=4)
 
     try:

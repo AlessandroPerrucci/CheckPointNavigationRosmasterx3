@@ -117,7 +117,7 @@ def astar_dircost(array, start, goal):
                 move_cost = 1
                 penalty = 0
                 if neighbor_dir != current_dir:  # Cambio direzione
-                    penalty = 1  # Puoi modificare questa penalità
+                    penalty = 1
 
                 tentative_g_score = current_g + move_cost + penalty
                 neighbor_state = (neighbor_pos, neighbor_dir)
@@ -185,7 +185,7 @@ def main(args=None):
     client = MovimentoClient()
 
     try:
-        scelta = int(input("inserire 1 se si vuole provare, 0 per automatico"))
+        scelta = int(input("inserire 1 se si vuole provare, 0 per automatico:  "))
         if scelta==1:
             while rclpy.ok():
                 try:
@@ -225,11 +225,11 @@ def main(args=None):
             #print(mosse)
 
             cord = [
-                [172, 29],
-                [30, 8],
-                [14, 29],
-                [30,8],
-                [172,29],
+                [144, 55],
+                [24, 30],
+                [80, 20],
+                [80, 95],
+                [144, 55],
 
             ]
             for j in range(0, len(cord) - 1):
