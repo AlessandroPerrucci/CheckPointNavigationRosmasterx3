@@ -38,7 +38,6 @@ RUN apt-get update && apt-get install -y \
     ros-humble-robot-localization \
     apt-transport-https \
     && rm -rf /var/lib/apt/lists/*
-RUN apt-get update && apt-get install -y ros-humble-cartographer ros-humble-cartographer-ros
 WORKDIR /ros_ws
 COPY src/ /ros_ws/
 RUN git clone -b ros2 https://github.com/Slamtec/rplidar_ros.git
