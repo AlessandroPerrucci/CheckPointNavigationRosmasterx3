@@ -44,7 +44,13 @@ COPY src/ /ros_ws/
 RUN git clone -b ros2 https://github.com/Slamtec/rplidar_ros.git
 RUN git clone https://github.com/Adlink-ROS/rf2o_laser_odometry.git
 RUN git clone https://github.com/orbbec/ros2_astra_camera.git
-RUN . /opt/ros/humble/setup.sh && rm -rf build/ log/ install/ && colcon build
+RUN git clone https://github.com/libuvc/libuvc.git
+WORKDIR libuvc/build/
+RUN cmake .. && make -j4
+RUN make install
+RUN ldconfig
+WORKDIR /ros_ws
+RUN . /opt/ros/humble/setup.sh && colcon build
 WORKDIR ../
 COPY start_mapping.sh .
 COPY start_navigating.sh .

@@ -33,17 +33,18 @@ in the folder where the Dockerfile is located.
 - Open the docker with the command
 
 ```bash
-   docker run -it --device=/dev/myserial --device=/dev/rplidar ros2-humble-arm64
+  docker run -it --privileged -v /dev:/dev ros2-humble-arm64
 ```
 
--Run the command
+-Run the commands
 
 ```bash
-   ros2 launch mapping mapping_launch.py 
+   ros2 launch mapping mapping_launch.py
+   ros2 run mapping keyboard.py
 ```
 
 - Move the robot in the environment by using the keyboard.
-- When you're done press ctrl+c, this will close the program and save the map.
+- When you're done press ctrl+c or q, this will close the program and save the map.
 
 ## Start patrolling
 
@@ -51,11 +52,20 @@ in the folder where the Dockerfile is located.
 - Open the docker with the command
 
 ```bash
-   docker run -it --device=/dev/myserial --device=/dev/rplidar ros2-humble-arm64
+  docker run -it --privileged -v /dev:/dev ros2-humble-arm64
 ```
 
 - Run the command
 
 ```bash
-   ros2 launch patrol_ws start_patrolling.py 
+   ros2 run client_controller client_controller
+   ros2 run driver_server driver_server
 ```
+## Open the camera
+- If needed you can use
+```bash
+   ros2 launch astra_camera astro_pro_plus.launch.xml
+   ros2 run web_video_server web_video_server
+```
+to activate and stream what is shown on the mounted camera.
+- Open a browser and search http://YOUR-ROBOT-IP/stream?topic=/camera/color/image_raw to see the stream
