@@ -21,22 +21,6 @@ def generate_launch_description():
             output='screen',
             arguments=['0', '0', '0.2', '0', '0', '0', 'base_link', 'laser']
         ),
-
-        Node(
-            package='slam_toolbox',
-            executable='async_slam_toolbox_node',
-            name='slam_toolbox',
-            output='screen',
-            parameters=[
-                {'use_sim_time': False},
-                {'slam_params_file': '/ros_ws/mapping/slam_toolbox_online.yaml'}
-            ],
-            remappings=[
-                ('scan', '/scan')
-            ]
-        ),
-
-
         Node(
             package='rf2o_laser_odometry',
             executable='rf2o_laser_odometry_node',

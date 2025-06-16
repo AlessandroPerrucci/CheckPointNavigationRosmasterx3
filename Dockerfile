@@ -31,6 +31,8 @@ RUN apt-get update && apt-get install -y \
     ros-humble-slam-toolbox \
     ros-humble-navigation2 \
     ros-humble-nav2-bringup \
+    ros-humble-cartographer \
+    ros-humble-cartographer-ros \
     ros-humble-image-transport \
     ros-humble-image-transport-plugins \
     ros-humble-camera-info-manager \
@@ -51,8 +53,7 @@ RUN ldconfig
 WORKDIR /ros_ws
 RUN . /opt/ros/humble/setup.sh && colcon build
 WORKDIR ../
-COPY start_mapping.sh .
-COPY start_navigating.sh .
+COPY setupCartographer.lua ./
 # Setup ambiente ROS 2
 RUN echo "source /opt/ros/humble/setup.bash" >> /root/.bashrc
 RUN echo "source /ros_ws/install/setup.bash" >> /root/.bashrc
